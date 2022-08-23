@@ -67,4 +67,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' //for ViewModelScope
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1' //for Livedata
+
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 }
