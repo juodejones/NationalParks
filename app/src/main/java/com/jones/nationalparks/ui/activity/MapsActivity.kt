@@ -1,8 +1,6 @@
 package com.jones.nationalparks.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 
@@ -18,8 +16,8 @@ import com.jones.nationalparks.R
 import com.jones.nationalparks.data.model.Data
 import com.jones.nationalparks.databinding.ActivityMapsBinding
 import com.jones.nationalparks.ui.CustomInfoWindow
-import com.jones.nationalparks.ui.MapsViewModelFactory
-import com.jones.nationalparks.ui.ParksViewModel
+import com.jones.nationalparks.ui.viewmodel.MapsViewModelFactory
+import com.jones.nationalparks.ui.viewmodel.MapsViewModel
 import com.jones.nationalparks.ui.fragments.ParksFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -28,7 +26,7 @@ import javax.inject.Inject
 class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
 
     @Inject lateinit var parksViewModelFactory: MapsViewModelFactory
-    lateinit var parksViewModel: ParksViewModel
+    private lateinit var mapsViewModel: MapsViewModel
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -43,6 +41,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnInfoWin
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        mapsViewModel = ViewModelProvider(this,parksViewModelFactory)[MapsViewModel::class.java]
+        mapsViewModel.getParks()
+
         var bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val id = it.itemId
@@ -52,14 +53,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnInfoWin
                     .replace(R.id.map,mapFragment).commit()
             } else {
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.map,ParksFragment.newInstance()).commit()
+                    .replace(R.id.map,ParksFragment.newInstance()).commit()
             }
             true
         }
-
-
-        parksViewModel = ViewModelProvider(this,parksViewModelFactory)[ParksViewModel::class.java]
-        parksViewModel.getParks()
 
     }
 
@@ -67,7 +64,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback, GoogleMap.OnInfoWin
         mMap = googleMap
         mMap.setInfoWindowAdapter(CustomInfoWindow(applicationContext))
         mMap.setOnInfoWindowClickListener(this)
-        parksViewModel.parksData.observe(this) {
+        mapsViewModel.parksData.observe(this) {
             //Log.d("MainParks", "onMapReady: ${it.data}")
             populateMap(it.data?.data)
         }

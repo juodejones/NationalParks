@@ -2,7 +2,7 @@ package com.jones.nationalparks.depInj
 
 import android.app.Application
 import com.jones.nationalparks.domain.GetParksUseCase
-import com.jones.nationalparks.ui.MapsViewModelFactory
+import com.jones.nationalparks.ui.viewmodel.MapsViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

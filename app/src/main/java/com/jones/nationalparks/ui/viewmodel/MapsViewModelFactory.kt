@@ -1,4 +1,4 @@
-package com.jones.nationalparks.ui
+package com.jones.nationalparks.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -11,6 +11,6 @@ class MapsViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ParksViewModel(app,getParksUseCase) as T
+        return MapsViewModel(app,getParksUseCase) as T
     }
 }

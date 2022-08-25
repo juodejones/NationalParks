@@ -5,4 +5,6 @@
     <string name="textview">Text View</string>
     <string name="operating_hours">Operating Hours</string>
     <string name="info_not_available">Information Not Available!</string>
+    <string name="map">Map</string>
+    <string name="parks">Parks</string>
 </resources>

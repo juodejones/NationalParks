@@ -6,30 +6,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jones.nationalparks.R
 import com.jones.nationalparks.data.model.Data
-import com.jones.nationalparks.ui.MapsViewModelFactory
-import com.jones.nationalparks.ui.ParksViewModel
+import com.jones.nationalparks.data.model.ParksData
 import com.jones.nationalparks.ui.adapter.OnParkClickListener
+import com.jones.nationalparks.ui.adapter.ParkRecyclerViewAdapter
+import com.jones.nationalparks.ui.viewmodel.MapsViewModel
+import com.jones.nationalparks.ui.viewmodel.MapsViewModelFactory
 import javax.inject.Inject
 
 class ParksFragment : Fragment(),OnParkClickListener {
 
-    @Inject
-    lateinit var parksViewModelFactory: MapsViewModelFactory
-    lateinit var parksViewModel: ParksViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parksViewModel = ViewModelProvider(this,parksViewModelFactory)[ParksViewModel::class.java]
-    }
+    private lateinit var mapsViewModelFactory: MapsViewModelFactory
+    private lateinit var mapsViewModel: MapsViewModel
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewAdapter: ParkRecyclerViewAdapter
+    private var parkList: ParksData? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_parks, container, false)
+        val view = inflater.inflate(R.layout.fragment_parks, container, false)
+        mapsViewModel = ViewModelProvider(requireActivity())[MapsViewModel::class.java]
+        mapsViewModel.getParks()
+        recyclerView = view.findViewById(R.id.park_recyclerView)
+        setAdapter()
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setList()
     }
 
     companion object {
@@ -37,8 +48,23 @@ class ParksFragment : Fragment(),OnParkClickListener {
     }
 
     override fun onParkClicked(data: Data) {
-        parksViewModel.selectedPark.postValue(data)
+        mapsViewModel.selectedPark.postValue(data)
+        childFragmentManager.beginTransaction()
+            .add(R.id.park_fragment, DetailsFragment())
+    }
 
+    private fun setAdapter() {
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerViewAdapter = ParkRecyclerViewAdapter(parkList,this)
+        recyclerView.adapter = recyclerViewAdapter
+    }
+
+    private fun setList() {
+        mapsViewModel.parksData.observe(viewLifecycleOwner) {
+            parkList = mapsViewModel.parksData.value!!.data
+            recyclerViewAdapter.updateItem(parkList!!)
+        }
     }
 
 }

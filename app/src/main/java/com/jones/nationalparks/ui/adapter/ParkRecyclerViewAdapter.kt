@@ -12,7 +12,7 @@ import com.jones.nationalparks.data.model.ParksData
 import com.squareup.picasso.Picasso
 
 class ParkRecyclerViewAdapter(
-    private val parksData: ParksData,
+    private var parksData: ParksData?,
     val parkClickListener: OnParkClickListener
 ) : RecyclerView.Adapter<ParkRecyclerViewAdapter.ViewHolder>() {
 
@@ -24,7 +24,7 @@ class ParkRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val park = parksData.data?.get(position)!!
+        val park = parksData?.data?.get(position)!!
 
         holder.parkName.text = park.name
         holder.parkState.text = park.states
@@ -41,7 +41,11 @@ class ParkRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int {
-        return parksData.data?.size!!
+        return parksData?.data?.size!!
+    }
+
+    fun updateItem(parks: ParksData) {
+        this.parksData = parks!!
     }
 
     inner class ViewHolder(
@@ -54,7 +58,7 @@ class ParkRecyclerViewAdapter(
         private val onParkClickListener = parkClickListener
 
         override fun onClick(v: View?) {
-            val currPark = parksData.data?.get(adapterPosition)!!
+            val currPark = parksData?.data?.get(adapterPosition)!!
             onParkClickListener.onParkClicked(currPark)
         }
     }

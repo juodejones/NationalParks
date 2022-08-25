@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.jones.nationalparks.R
 import com.jones.nationalparks.data.model.Image
 import com.squareup.picasso.Picasso
 
@@ -19,7 +20,7 @@ class ViewPagerAdapter(val imageList: List<Image?>): RecyclerView.Adapter<ViewPa
 
     override fun onBindViewHolder(holder: ImageSlider, position: Int) {
         Picasso.get()
-            .load(imageList[position].url)
+            .load(imageList[position]?.url)
             .fit()
             .placeholder(android.R.drawable.stat_notify_error)
             .into(holder.imageView)

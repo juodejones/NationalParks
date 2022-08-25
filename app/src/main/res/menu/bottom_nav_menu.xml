@@ -6,10 +6,10 @@
         android:id="@+id/maps_nav_button"
         android:icon="@android:drawable/ic_menu_mapmode"
         app:showAsAction="ifRoom"
-        android:title="Map" />
+        android:title="@string/map"/>
     <item
         android:id="@+id/parks_nav_button"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_nature_people_24"
-        android:title="Parks" />
+        android:title="@string/parks" />
 </menu>

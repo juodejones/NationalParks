@@ -6,19 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.jones.nationalparks.R
-import com.jones.nationalparks.ui.ParksViewModel
+import com.jones.nationalparks.ui.viewmodel.MapsViewModel
 import com.jones.nationalparks.ui.adapter.ViewPagerAdapter
 import java.lang.StringBuilder
 
 class DetailsFragment : Fragment() {
 
-    private lateinit var parkViewModel: ParksViewModel
+    private lateinit var parkViewModel: MapsViewModel
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private lateinit var viewPager: ViewPager2
 
@@ -32,7 +30,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewPager = view.findViewById(R.id.details_viewpager)
-        parkViewModel = ViewModelProvider(requireActivity())[ParksViewModel::class.java]
+        parkViewModel = ViewModelProvider(requireActivity())[MapsViewModel::class.java]
 
         parkViewModel.selectedPark.observe(viewLifecycleOwner) { park ->
             val detailsParkName = view.findViewById<TextView>(R.id.details_park_name)

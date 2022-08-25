@@ -1,4 +1,4 @@
-package com.jones.nationalparks.ui
+package com.jones.nationalparks.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
@@ -11,13 +11,12 @@ import com.jones.nationalparks.domain.GetParksUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ParksViewModel(val app: Application, val getParksUseCase: GetParksUseCase) : ViewModel() {
+class MapsViewModel(val app: Application, val getParksUseCase: GetParksUseCase) : ViewModel() {
 
     val parksData: MutableLiveData<Resource<ParksData>> = MutableLiveData()
     var selectedPark = MutableLiveData<Data>()
 
     fun getParks() = viewModelScope.launch(Dispatchers.IO) {
         parksData.postValue(getParksUseCase.getParks())
-
     }
 }
